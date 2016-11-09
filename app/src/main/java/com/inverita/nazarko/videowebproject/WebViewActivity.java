@@ -54,7 +54,7 @@ public class  WebViewActivity extends Activity implements PlaybackControlLayer.F
     public class JCCallBack {
 
         @JavascriptInterface
-        public void adViewJieCaoVideoPlayer(final int width, final int height, final int top, final int left) {
+        public void adViewJieCaoVideoPlayer(final int width, final int height, final int top, final int left,final String url) {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -67,11 +67,8 @@ public class  WebViewActivity extends Activity implements PlaybackControlLayer.F
                     layoutParams.width = WebViewActivity.dip2px(WebViewActivity.this, width);
 
                     VideoListItem item = new VideoListItem("",
-                            new Video("http://www.youtube.com/api/manifest/dash/id/bf5bb2419360daf1/source/youtub" +
-                                    "e?as=fmp4_audio_clear,fmp4_sd_hd_clear&sparams=ip,ipbits,expire,source,id,as&ip=" +
-                                    "0.0.0.0&ipbits=0&expire=19000000000&signature=51AF5F39AB0CEC3E5497CD9C900EBFEAEC" +
-                                    "CCB5C7.8506521BFC350652163895D4C26DEE124209AA9E&key=ik0",
-                                    Video.VideoType.DASH,
+                            new Video(url,
+                                    Video.VideoType.MP4,
                                     "bf5bb2419360daf1"),
                             "https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=/124319096/external/" +
                                     "single_ad_samples&ciu_szs=300x250&impl=s&gdfp_req=1&env=vp&output=vast" +
