@@ -1,0 +1,14 @@
+[
+    {
+        "merged": "/DeveloperProject/VideoWebProject/googlemediaframework/build/intermediates/res/merged/debug/layout/playback_control_layer.xml",
+        "source": "/DeveloperProject/VideoWebProject/googlemediaframework/src/main/res/layout/playback_control_layer.xml"
+    },
+    {
+        "merged": "/DeveloperProject/VideoWebProject/googlemediaframework/build/intermediates/res/merged/debug/layout/subtitle_layer.xml",
+        "source": "/DeveloperProject/VideoWebProject/googlemediaframework/src/main/res/layout/subtitle_layer.xml"
+    },
+    {
+        "merged": "/DeveloperProject/VideoWebProject/googlemediaframework/build/intermediates/res/merged/debug/layout/video_surface_layer.xml",
+        "source": "/DeveloperProject/VideoWebProject/googlemediaframework/src/main/res/layout/video_surface_layer.xml"
+    }
+]
