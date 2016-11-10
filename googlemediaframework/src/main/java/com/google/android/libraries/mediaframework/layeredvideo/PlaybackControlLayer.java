@@ -971,58 +971,58 @@ public class PlaybackControlLayer implements Layer, PlayerControlCallback {
   public void updateActionButtons() {
     actionButtonsContainer.removeAllViews();
 
-    if (isFullscreen) {
-      for (ImageButton imageButton : actionButtons) {
-        actionButtonsContainer.addView(imageButton);
-      }
-    } else {
-      ImageButton overflowButton = new ImageButton(getLayerManager().getActivity());
-      overflowButton.setContentDescription(getLayerManager()
-          .getActivity()
-          .getString(R.string.overflow));
-      overflowButton.setImageDrawable(getLayerManager()
-          .getActivity()
-          .getResources()
-          .getDrawable(R.drawable.ic_action_overflow));
-
-      AlertDialog.Builder builder = new AlertDialog.Builder(getLayerManager().getActivity());
-      builder.setTitle(getLayerManager().getActivity().getString(R.string.select_an_action));
-      final CharSequence[] actions = new CharSequence[actionButtons.size()];
-      for (int i = 0; i < actionButtons.size(); i++) {
-        actions[i] = actionButtons.get(i).getContentDescription();
-      }
-      builder.setItems(actions, new DialogInterface.OnClickListener() {
-        @Override
-        public void onClick(DialogInterface dialogInterface, int i) {
-          actionButtons.get(i).performClick();
-        }
-      });
-
-      final AlertDialog alertDialog = builder.create();
-
-      overflowButton.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-          alertDialog.show();
-        }
-      });
-
-      FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(
-          ViewGroup.LayoutParams.WRAP_CONTENT,
-          ViewGroup.LayoutParams.WRAP_CONTENT
-      );
-      int margin = 5 * getLayerManager()
-          .getActivity()
-          .getResources()
-          .getDisplayMetrics()
-          .densityDpi;
-      layoutParams.setMargins(margin, 0, margin, 0);
-
-      overflowButton.setBackgroundColor(Color.TRANSPARENT);
-      overflowButton.setLayoutParams(layoutParams);
-      overflowButton.setColorFilter(controlColor);
-      actionButtonsContainer.addView(overflowButton);
-    }
+//    if (isFullscreen) {
+//      for (ImageButton imageButton : actionButtons) {
+//        actionButtonsContainer.addView(imageButton);
+//      }
+//    } else {
+//      ImageButton overflowButton = new ImageButton(getLayerManager().getActivity());
+//      overflowButton.setContentDescription(getLayerManager()
+//          .getActivity()
+//          .getString(R.string.overflow));
+//      overflowButton.setImageDrawable(getLayerManager()
+//          .getActivity()
+//          .getResources()
+//          .getDrawable(R.drawable.ic_action_overflow));
+//
+//      AlertDialog.Builder builder = new AlertDialog.Builder(getLayerManager().getActivity());
+//      builder.setTitle(getLayerManager().getActivity().getString(R.string.select_an_action));
+//      final CharSequence[] actions = new CharSequence[actionButtons.size()];
+//      for (int i = 0; i < actionButtons.size(); i++) {
+//        actions[i] = actionButtons.get(i).getContentDescription();
+//      }
+//      builder.setItems(actions, new DialogInterface.OnClickListener() {
+//        @Override
+//        public void onClick(DialogInterface dialogInterface, int i) {
+//          actionButtons.get(i).performClick();
+//        }
+//      });
+//
+//      final AlertDialog alertDialog = builder.create();
+//
+//      overflowButton.setOnClickListener(new View.OnClickListener() {
+//        @Override
+//        public void onClick(View view) {
+//          alertDialog.show();
+//        }
+//      });
+//
+//      FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(
+//          ViewGroup.LayoutParams.WRAP_CONTENT,
+//          ViewGroup.LayoutParams.WRAP_CONTENT
+//      );
+//      int margin = 5 * getLayerManager()
+//          .getActivity()
+//          .getResources()
+//          .getDisplayMetrics()
+//          .densityDpi;
+//      layoutParams.setMargins(margin, 0, margin, 0);
+//
+//      overflowButton.setBackgroundColor(Color.TRANSPARENT);
+//      overflowButton.setLayoutParams(layoutParams);
+//      overflowButton.setColorFilter(controlColor);
+//      actionButtonsContainer.addView(overflowButton);
+//    }
   }
 
   /**

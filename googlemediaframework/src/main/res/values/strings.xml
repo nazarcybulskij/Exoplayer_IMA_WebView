@@ -16,7 +16,6 @@ limitations under the License.
 -->
 
 <resources>
-    <string name="select_an_action">Select an action&#8230;</string>
     <string name="overflow">Overflow</string>
     <string name="fullscreen_button">Fullscreen</string>
     <string name="time_duration">Duration</string>

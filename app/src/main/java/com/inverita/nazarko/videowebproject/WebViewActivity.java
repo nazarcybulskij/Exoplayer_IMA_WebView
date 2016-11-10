@@ -14,16 +14,19 @@ import android.widget.FrameLayout;
 import com.google.android.libraries.mediaframework.exoplayerextensions.Video;
 import com.google.android.libraries.mediaframework.layeredvideo.PlaybackControlLayer;
 
+import java.util.HashMap;
 
 import adplayer.ImaPlayer;
 
-public class  WebViewActivity extends Activity implements PlaybackControlLayer.FullscreenCallback{
+public class  WebViewActivity extends Activity{
 
     WebView mWebView;
     int  webViewposution;
 
-    private ImaPlayer imaPlayer;
-    private FrameLayout videoPlayerContainer;
+    HashMap<PlaybackControlLayer.FullscreenCallback,ImaPlayer>  playersMap = new HashMap<>();
+
+   // private ImaPlayer imaPlayer;
+    //private FrameLayout videoPlayerContainer;
     AbsoluteLayout.LayoutParams layoutParams;
 
     @Override
@@ -34,21 +37,7 @@ public class  WebViewActivity extends Activity implements PlaybackControlLayer.F
         mWebView.getSettings().setJavaScriptEnabled(true);
         mWebView.addJavascriptInterface(new JCCallBack(), "jcvd");
         mWebView.loadUrl("file:///android_asset/jcvd.html");
-        videoPlayerContainer = (FrameLayout) getLayoutInflater().inflate(R.layout.frame, null);
-    }
-
-    @Override
-    public void onGoToFullscreen() {
-        webViewposution = mWebView.getScrollY();
-         getActionBar().hide();
-        mWebView.scrollTo(0,0);
-
-    }
-
-    @Override
-    public void onReturnFromFullscreen() {
-        getActionBar().show();
-        mWebView.scrollTo(0,webViewposution);
+        //videoPlayerContainer = (FrameLayout) getLayoutInflater().inflate(R.layout.frame, null);
     }
 
     public class JCCallBack {
@@ -75,7 +64,9 @@ public class  WebViewActivity extends Activity implements PlaybackControlLayer.F
                                     "&unviewed_position_start=1&cust_params=deployment%3Ddevsite%26sample_ct" +
                                     "%3Dskippablelinear&correlator=");
 
-                    createImaPlayer(item);
+                    FrameLayout  videoPlayerContainer =  (FrameLayout) getLayoutInflater().inflate(R.layout.frame, null);
+                    createImaPlayer(item,videoPlayerContainer);
+
 
                     mWebView.addView(videoPlayerContainer,layoutParams);
 
@@ -93,7 +84,9 @@ public class  WebViewActivity extends Activity implements PlaybackControlLayer.F
     /**
      * When a video has been selected, create an {@link ImaPlayer} and play the video.
      */
-    public void createImaPlayer(VideoListItem videoListItem) {
+    public void createImaPlayer(VideoListItem videoListItem,FrameLayout videoPlayerContainer) {
+        ImaPlayer imaPlayer = null;
+
         if (imaPlayer != null) {
             imaPlayer.release();
         }
@@ -108,7 +101,25 @@ public class  WebViewActivity extends Activity implements PlaybackControlLayer.F
                 videoListItem.video,
                 videoTitle,
                 adTagUrl);
-        imaPlayer.setFullscreenCallback(this);
+
+
+        imaPlayer.setFullscreenCallback(new PlaybackControlLayer.FullscreenCallback() {
+            @Override
+            public void onGoToFullscreen() {
+                webViewposution = mWebView.getScrollY();
+                getActionBar().hide();
+                mWebView.scrollTo(0,0);
+
+            }
+
+            @Override
+            public void onReturnFromFullscreen() {
+                getActionBar().show();
+                mWebView.scrollTo(0,webViewposution);
+            }
+        });
+
+
         imaPlayer.play();
     }
 
