@@ -2,9 +2,13 @@ package com.inverita.nazarko.videowebproject;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Point;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
+import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.JavascriptInterface;
@@ -23,11 +27,19 @@ public class  WebViewActivity extends Activity{
     WebView mWebView;
     int  webViewposution;
 
-    HashMap<PlaybackControlLayer.FullscreenCallback,ImaPlayer>  playersMap = new HashMap<>();
+    HashMap<PlaybackControlLayer.FullscreenCallback,ImaPlayer>  playersSet = new HashMap<>();
 
    // private ImaPlayer imaPlayer;
     //private FrameLayout videoPlayerContainer;
     AbsoluteLayout.LayoutParams layoutParams;
+
+    public static final String CSS_STYLE = "<style>img{display: inline;height: auto;max-width: 100%%;}</style>"+
+            "<style>iframe{display: inline;height: %d ;max-width: 100%%;}p{font-size:18;color:#212121}a{color:#2397f3}</style>"+
+            "<style>video{display: inline}</style>";
+
+
+
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -36,8 +48,24 @@ public class  WebViewActivity extends Activity{
         mWebView = (WebView) findViewById(R.id.webview);
         mWebView.getSettings().setJavaScriptEnabled(true);
         mWebView.addJavascriptInterface(new JCCallBack(), "jcvd");
+       // mWebView.loadUrl("file:///android_asset/jcvd.html");
+
+//        Display display = getWindowManager().getDefaultDisplay();
+//        Point size = new Point();
+//        display.getSize(size);
+//        int width = size.x;
+//        int heigh =convertPixelsToDp((int) ((width * 9 / 16)), WebViewActivity.this);
+//        String style = String.format(CSS_STYLE, heigh);
         mWebView.loadUrl("file:///android_asset/jcvd.html");
+        //mWebView.loadDataWithBaseURL("jcvd", style+str, "text/html", "UTF-8", null);
         //videoPlayerContainer = (FrameLayout) getLayoutInflater().inflate(R.layout.frame, null);
+    }
+
+    public static int convertPixelsToDp(float px, Context context) {
+        Resources resources = context.getResources();
+        DisplayMetrics metrics = resources.getDisplayMetrics();
+        float dp = px / ((float) metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT);
+        return (int) dp;
     }
 
     public class JCCallBack {
@@ -58,11 +86,7 @@ public class  WebViewActivity extends Activity{
                     VideoListItem item = new VideoListItem("",
                             new Video(url,
                                     Video.VideoType.MP4,
-                                    "bf5bb2419360daf1"),
-                            "https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=/124319096/external/" +
-                                    "single_ad_samples&ciu_szs=300x250&impl=s&gdfp_req=1&env=vp&output=vast" +
-                                    "&unviewed_position_start=1&cust_params=deployment%3Ddevsite%26sample_ct" +
-                                    "%3Dskippablelinear&correlator=");
+                                    "bf5bb2419360daf1"), "");
 
                     FrameLayout  videoPlayerContainer =  (FrameLayout) getLayoutInflater().inflate(R.layout.frame, null);
                     createImaPlayer(item,videoPlayerContainer);
@@ -76,9 +100,23 @@ public class  WebViewActivity extends Activity{
         }
     }
 
+    @Override
+    protected void onStop() {
+        for(ImaPlayer temp:playersSet.values()){
+            temp.pause();
+        }
+        super.onStop();
+    }
+
+
     public static int dip2px(Context context, float dpValue) {
-        final float scale = context.getResources().getDisplayMetrics().density;
-        return (int) (dpValue * scale + 0.5f);
+//        final float scale = context.getResources().getDisplayMetrics().density;
+//        return (int) (dpValue * scale + 0.5f);
+
+        Resources resources = context.getResources();
+        DisplayMetrics metrics = resources.getDisplayMetrics();
+        float px = dpValue * ((float) metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT);
+        return (int) px;
     }
 
     /**
@@ -102,14 +140,12 @@ public class  WebViewActivity extends Activity{
                 videoTitle,
                 adTagUrl);
 
-
-        imaPlayer.setFullscreenCallback(new PlaybackControlLayer.FullscreenCallback() {
+        PlaybackControlLayer.FullscreenCallback  callback = new PlaybackControlLayer.FullscreenCallback() {
             @Override
             public void onGoToFullscreen() {
                 webViewposution = mWebView.getScrollY();
                 getActionBar().hide();
                 mWebView.scrollTo(0,0);
-
             }
 
             @Override
@@ -117,9 +153,9 @@ public class  WebViewActivity extends Activity{
                 getActionBar().show();
                 mWebView.scrollTo(0,webViewposution);
             }
-        });
-
-
+        };
+        playersSet.put(callback,imaPlayer);
+        imaPlayer.setFullscreenCallback(callback);
         imaPlayer.play();
     }
 

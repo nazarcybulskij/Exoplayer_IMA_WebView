@@ -226,7 +226,7 @@ public class ImaPlayer {
 
       // Display a toast message indicating the error.
       // You should remove this line of code for your production app.
-      Toast.makeText(activity, adErrorEvent.getError().getMessage(), Toast.LENGTH_SHORT).show();
+      //Toast.makeText(activity, adErrorEvent.getError().getMessage(), Toast.LENGTH_SHORT).show();
       resumeContent();
     }
 
